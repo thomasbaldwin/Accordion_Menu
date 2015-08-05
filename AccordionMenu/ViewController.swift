@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     var sectionTitleArray : NSMutableArray = NSMutableArray()
     var sectionContentDict : NSMutableDictionary = NSMutableDictionary()
     var arrayForBool : NSMutableArray = NSMutableArray()
+    var selectedRows: NSMutableArray = []
     
     
     @IBOutlet weak var tableView: UITableView!
@@ -21,32 +22,41 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        arrayForBool = ["0","0"]
-        sectionTitleArray = ["Pool A","Pool B"]
+        arrayForBool = ["0","0", "0", "0", "0", "0"]
+        sectionTitleArray = ["Pool A","Pool B", "Pool C", "Pool D", "Pool E", "Pool F"]
         var tmp1 : NSArray = ["New Zealand","Australia","Bangladesh","Sri Lanka"]
         var string1 = sectionTitleArray .objectAtIndex(0) as? String
         [sectionContentDict .setValue(tmp1, forKey:string1! )]
         var tmp2 : NSArray = ["India","South Africa","UAE","Pakistan"]
         string1 = sectionTitleArray .objectAtIndex(1) as? String
         [sectionContentDict .setValue(tmp2, forKey:string1! )]
+        string1 = sectionTitleArray .objectAtIndex(2) as? String
+        [sectionContentDict .setValue(tmp2, forKey:string1! )]
+        string1 = sectionTitleArray .objectAtIndex(3) as? String
+        [sectionContentDict .setValue(tmp2, forKey:string1! )]
+        string1 = sectionTitleArray .objectAtIndex(4) as? String
+        [sectionContentDict .setValue(tmp2, forKey:string1! )]
+        string1 = sectionTitleArray .objectAtIndex(5) as? String
+        [sectionContentDict .setValue(tmp2, forKey:string1! )]
+        
         
         
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-
+        
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return sectionTitleArray.count
     }
     
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-       
+        
         if(arrayForBool .objectAtIndex(section).boolValue == true)
         {
             var tps = sectionTitleArray.objectAtIndex(section) as! String
@@ -61,7 +71,7 @@ class ViewController: UIViewController {
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-       
+        
         return 50
     }
     
@@ -126,12 +136,26 @@ class ViewController: UIViewController {
         else{
             var content = sectionContentDict .valueForKey(sectionTitleArray.objectAtIndex(indexPath.section) as! String) as! NSArray
             cell.textLabel?.text = content .objectAtIndex(indexPath.row) as? String
-            cell.backgroundColor = UIColor .greenColor()
+            
+            if selectedRows.containsObject(indexPath) {
+                cell.backgroundColor = UIColor.blueColor()
+            } else {
+                cell.backgroundColor = UIColor.greenColor()
+            }
         }
         
         return cell
     }
-
-
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if selectedRows.containsObject(indexPath) {
+            selectedRows.removeObject(indexPath)
+        }
+        else {
+            selectedRows.addObject(indexPath)
+        }
+        
+        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+    }
+    
 }
-
